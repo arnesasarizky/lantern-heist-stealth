@@ -44,6 +44,7 @@ const game = {
   stepTimer: 0,
   nearMissWarned: false,
   shot: null,
+  frozen: false, // screenshot scenes: render but never simulate
 };
 
 function fmtTime(s) {
@@ -57,7 +58,7 @@ function loadLevel(index) {
   game.level = parseLevel(LEVELS[index]);
   const s = tileCenter(game.level.playerStart.x, game.level.playerStart.y);
   game.player = { x: s.x, y: s.y, faceAngle: 0, moving: false };
-  game.guards = game.level.guards.map((def, i) => createGuard(def, i));
+  game.guards = LEVELS[index].guards.map((def, i) => createGuard(def, i));
   game.particles = [];
   game.detections = 0;
   game.nearMissWarned = false;
@@ -81,6 +82,13 @@ function flashBanner(text, cls) {
   hud.banner.className = `banner ${cls}`;
   clearTimeout(flashBanner._t);
   flashBanner._t = setTimeout(() => { hud.banner.className = 'banner'; }, 2200);
+}
+
+// Staged-scene banner: stays put (no timeout) for screenshot scenes.
+function setBanner(text, cls) {
+  clearTimeout(flashBanner._t);
+  hud.banner.textContent = text;
+  hud.banner.className = `banner ${cls}`;
 }
 
 function updateHud() {
@@ -261,6 +269,7 @@ function updatePlaying(dt, now) {
 // ---- Deterministic screenshot scenes (?shot=cover|suspicion|shadow|win) ----
 function applyShot(shot) {
   game.shot = shot;
+  game.frozen = true; // staged scene: render only, never simulate
   if (shot === 'cover') {
     loadLevel(0);
     game.state = 'playing';
@@ -291,7 +300,7 @@ function applyShot(shot) {
     game.score = 200;
     game.elapsed = 72;
     game.started = true;
-    flashBanner('⚠ A watchman almost saw you — freeze or slip into shadow!', 'warn');
+    setBanner('⚠ A watchman almost saw you — freeze or slip into shadow!', 'warn');
   } else if (shot === 'shadow') {
     loadLevel(1);
     game.state = 'playing';
@@ -306,6 +315,7 @@ function applyShot(shot) {
     const c1 = tileCenter(5, 6); g1.x = c1.x; g1.y = c1.y; g1.facing = -Math.PI / 2;
     g1.pauseTimer = 0.6;
     input.keys.add('shift'); // sneaking: the ring shows, the cone passes over
+    setBanner('Hidden in the shadows — the cone sweeps right past you', 'info');
   } else if (shot === 'win') {
     loadLevel(2);
     for (const page of game.level.pages) page.taken = true;
@@ -377,7 +387,7 @@ let last = performance.now();
 function frame(now) {
   const dt = Math.min(0.05, (now - last) / 1000);
   last = now;
-  if (game.state === 'playing') updatePlaying(dt, now / 1000);
+  if (game.state === 'playing' && !game.frozen) updatePlaying(dt, now / 1000);
   renderer.render(game, now / 1000);
   if (game.state === 'playing') updateHud();
   requestAnimationFrame(frame);
