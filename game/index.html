@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lantern Heist — a stealth game</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="stage">
+  <canvas id="game" width="1280" height="720"></canvas>
+  <div id="hud">
+    <div id="hud-level" class="hud-item">Wing I — The Reading Room · Level 1/3</div>
+    <div class="hud-right">
+      <span id="hud-pages" class="hud-item">📜 Pages 0/3</span>
+      <span id="hud-timer" class="hud-item">⏱ 00:00</span>
+      <span id="hud-score" class="hud-item">★ 0</span>
+      <span id="hud-eye" class="eye">👁 UNSEEN</span>
+    </div>
+  </div>
+  <div id="hud-banner" class="banner"></div>
+  <div id="overlay">
+    <h1 id="overlay-title">🕯 LANTERN HEIST</h1>
+    <p id="overlay-text"></p>
+    <p id="overlay-hint" class="hint"></p>
+  </div>
+  <div id="help">WASD / arrows move · SHIFT sneak · P pause · R restart · M mute</div>
+</div>
+<script type="module" src="src/main.js"></script>
+</body>
+</html>

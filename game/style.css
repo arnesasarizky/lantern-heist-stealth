@@ -1,0 +1,97 @@
+/* Lantern Heist — page and HUD styling. The game itself is drawn on canvas. */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; background: #05060d; }
+body {
+  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+  color: #f0e8d0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+#stage { position: relative; width: 1280px; height: 720px; }
+#game { display: block; width: 1280px; height: 720px; background: #0a0d18; }
+
+#hud {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 14px;
+  background: linear-gradient(rgba(3, 4, 10, 0.85), rgba(3, 4, 10, 0));
+  pointer-events: none;
+  font-size: 15px;
+  font-weight: 600;
+  text-shadow: 0 1px 3px #000;
+}
+.hud-right { display: flex; gap: 16px; align-items: center; }
+.hud-item { white-space: nowrap; }
+.eye {
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(20, 60, 30, 0.75);
+  border: 1px solid #2fae5f;
+  color: #bff0cf;
+}
+.eye.suspicious { background: rgba(90, 55, 5, 0.8); border-color: #ffb020; color: #ffe1a0; }
+.eye.alert { background: rgba(100, 10, 5, 0.85); border-color: #ff5040; color: #ffd0c8; animation: pulse 0.6s infinite alternate; }
+@keyframes pulse { from { transform: scale(1); } to { transform: scale(1.07); } }
+
+.banner {
+  position: absolute;
+  top: 64px; left: 50%;
+  transform: translateX(-50%);
+  padding: 8px 18px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  background: rgba(3, 4, 10, 0.8);
+  border: 1px solid transparent;
+  opacity: 0;
+  transition: opacity 0.25s;
+  pointer-events: none;
+  white-space: nowrap;
+  text-shadow: 0 1px 2px #000;
+}
+.banner.info { opacity: 1; border-color: #7fa8ff; color: #cfe0ff; }
+.banner.warn { opacity: 1; border-color: #ffb020; color: #ffe1a0; }
+.banner.danger { opacity: 1; border-color: #ff5040; color: #ffd0c8; animation: pulse 0.5s infinite alternate; }
+
+#overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  background: rgba(3, 4, 10, 0.78);
+  text-align: center;
+  padding: 40px;
+}
+#overlay.hidden { display: none; }
+#overlay h1 {
+  font-size: 52px;
+  letter-spacing: 4px;
+  color: #ffcf6e;
+  text-shadow: 0 0 24px rgba(255, 207, 110, 0.5), 0 2px 0 #000;
+}
+#overlay p {
+  font-size: 18px;
+  line-height: 1.6;
+  max-width: 760px;
+  white-space: pre-line;
+  color: #e8dfc4;
+}
+#overlay .hint { font-size: 16px; color: #9fb4ff; font-weight: 600; }
+
+#help {
+  position: absolute;
+  bottom: 8px; left: 0; right: 0;
+  text-align: center;
+  font-size: 12px;
+  color: rgba(240, 232, 208, 0.55);
+  pointer-events: none;
+  text-shadow: 0 1px 2px #000;
+}
